@@ -19,11 +19,11 @@ return array (
 				'routes' => array (
 
                         'login' => array(
-                            'type' => 'literal',
+                            'type' => 'segment',
                             'options' => array(
                                 'route' => '/login',
                                 'defaults' => array(
-                                    'controller' => 'User',
+                                    'controller' => 'Index',
                                     'action' => 'login'
                                 )
                             )
@@ -90,8 +90,7 @@ return array (
 		),
 		'controllers' => array (
 				'invokables' => array (
-						'Index' => 'Logview\Controller\IndexController',
-                        'User' => 'Logview\Controller\UserController'
+						'Index' => 'Logview\Controller\IndexController'
 				)
 		),
 		'view_manager' => array (

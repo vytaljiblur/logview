@@ -92,4 +92,14 @@ class IndexController extends AbstractActionController
 
         return new ViewModel();
     }
+
+    public function loginAction()
+    {
+        $view_model = new ViewModel();
+        $view_model->setVariables(array(
+            'url'  => $_GET['url']
+        ));
+
+        return $view_model;
+    }
 }
