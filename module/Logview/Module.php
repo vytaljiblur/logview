@@ -60,8 +60,6 @@ class Module
                 $response->getHeaders()->addHeaderLine('Location', '/login?url='.$url);
                 $response->setStatusCode(302);
 
-
-
                 return $response;
             } else {
 

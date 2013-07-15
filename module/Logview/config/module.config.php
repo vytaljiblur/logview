@@ -55,18 +55,36 @@ return array (
 								) 
 						),
 						'timecapsule' => array (
-                                'type' => 'segment',
+                                'type' => 'regex',
 								'options' => array (
-										'route' => '/log/timecapsule_[:date].htm',
+										'regex' => '/log/timecapsule_(?<date>[0-9]{8})?.htm',
 										'defaults' => array (
 												'controller' => 'Index',
 												'action' => 'timecapsule'
 										),
-                                        'constraints' => array(
-                                            'date' => '[0-9]{8}'
-                                        )
-								)
+                                        'spec'  => '/timecapsule_%date%'
+								),
+
 						),
+
+
+/*                        'full-name' => array(
+                            'type' => 'regex',
+                            'options' => array(
+                                // look here how I changed the regex in a way that the last parameter is optional
+                                'regex' => '/Customer/(?<firstname>[a-zA-Z0-9_-]+)/(?<middlename>[a-zA-Z0-9_-]+)/*(?<lastname>[a-zA-Z0-9_-]*)',
+                                'defaults' => array(
+                                    'controller' => 'Application\Controller\Customers',
+                                    'action'     => 'index',
+                                    'lastname'   => false, // add some default value to the optional parameter
+                                ),
+                                'spec'  => '/%firstname%/%middlename%/%lastname%'
+                            )
+                        ),*/
+
+
+
+
                         'delete' => array (
                             'type' => 'literal',
                             'options' => array (
