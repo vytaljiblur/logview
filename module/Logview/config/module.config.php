@@ -8,7 +8,7 @@
  */
 return array (
 
-        'logfile' => "/home/vitaliji/Desktop/logview/samplelog.log", // our log file
+        'logfile' => getcwd()."/samplelog.log", // our log file
 
         'user' => array(
             'login' => 'admin',

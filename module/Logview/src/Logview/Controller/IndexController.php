@@ -91,7 +91,13 @@ class IndexController extends AbstractActionController
         $config = $this->getServiceLocator()->get('Config');
         $file = file($config['logfile']); // Where to put errors? like opening and etc.
 
-        unlink($config['logfile']);
+        clearstatcache();
+        if (substr(sprintf('%o', fileperms($config['logfile'])), -4) == '0777') {
+            unlink($config['logfile']);
+        } else {
+            throw new \Exception("file cannot be deleted because of permissions");
+        }
+
 
         return new ViewModel();
     }
