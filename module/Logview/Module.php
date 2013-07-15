@@ -13,6 +13,10 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 
+use Logview\Service\ErrorHandling as ErrorHandlingService;
+use Zend\Log\Logger;
+use Zend\Log\Writer\Stream as LogWriterStream;
+
 class Module
 {
     public function onBootstrap(MvcEvent $e)
@@ -68,6 +72,21 @@ class Module
 
         });
 
+        $eventManager = $e->getApplication()->getEventManager();
+        $eventManager->attach('dispatch.error', function($event){
+            $e = $event->getResult()->exception;
+
+            switch (get_class($e)) {
+
+                case 'Logview\Error\NumberError':
+
+
+
+                    break;
+
+            }
+        });
+
 
     }
 
@@ -86,4 +105,30 @@ class Module
             ),
         );
     }
+
+
+    public function getServiceConfig()
+    {
+        return array(
+            'factories' => array(
+                'Logview\Service\ErrorHandling' =>  function($sm) {
+                    $logger = $sm->get('Zend\Log');
+                    $service = new ErrorHandlingService($logger);
+                    return $service;
+                },
+                'Zend\Log' => function ($sm) {
+                    $filename = 'log_' . date('F') . '.txt';
+                    $dir = '/data/logs';
+                    mkdir($dir, 0777, true);
+
+                    $log = new Logger();
+                    $writer = new LogWriterStream('./data/logs/' . $filename);
+                    $log->addWriter($writer);
+
+                    return $log;
+                },
+            ),
+        );
+    }
+
 }

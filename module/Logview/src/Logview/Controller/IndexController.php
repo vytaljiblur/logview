@@ -11,6 +11,7 @@ namespace Logview\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Logview\Error\NumberException;
 
 class IndexController extends AbstractActionController
 {
@@ -30,9 +31,11 @@ class IndexController extends AbstractActionController
 
         if ($num > 50) {
 
-            $view_model->setVariables(array(
+            throw new NumberException("My exception");
+
+/*            $view_model->setVariables(array(
                 'error'  => "Error: The biggest number is 50",
-            ));
+            ));*/
 
             return $view_model;
         }

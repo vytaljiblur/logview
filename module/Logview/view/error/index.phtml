@@ -17,10 +17,7 @@
     <dd>
         <pre class="prettyprint linenums"><?php echo $this->exception->getMessage() ?></pre>
     </dd>
-    <dt><?php echo $this->translate('Stack trace') ?>:</dt>
-    <dd>
-        <pre class="prettyprint linenums"><?php echo $this->exception->getTraceAsString() ?></pre>
-    </dd>
+
 </dl>
 <?php
     $e = $this->exception->getPrevious();
