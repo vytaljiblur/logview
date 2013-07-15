@@ -37,54 +37,47 @@ class Module
 
             $match = $e->getRouteMatch();
             $name = $match->getMatchedRouteName();
+            $request = $e->getRequest();
 
+            $cookies = $request->getCookie();
+            $posts = $request->getPost();
+            $server = $request->getServer();
 
-            if (!( ($_COOKIE['login'] == $auth['login']) && ($_COOKIE['password'] == $auth['password']) )) { // check if user entered the combination of user/pass correctly
+            $response = $e->getResponse();
+
+            if (!( ($cookies['login'] == $auth['login']) && ($cookies['password'] == $auth['password']) )) { // check if user entered the combination of user/pass correctly
 
                 // if it login then we are not need to redirect
-                if ( ($name == 'login') && (($_POST['login'] == null) || ($_POST['login'] == null)) ) {
+                if ( ($name == 'login') && (($posts['login'] == null) || ($posts['login'] == null)) ) {
                     return;
                 }
 
-                if ( ($name == 'login') && (($_POST['login'] == $auth['login']) || ($_POST['password'] == $auth['password'])) ) {
-                    $response = $e->getResponse();
+                if ( ($name == 'login') && (($posts['login'] == $auth['login']) || ($posts['password'] == $auth['password'])) ) {
+
 
                     setcookie("login", $_POST['login']);
                     setcookie("password", $_POST['password']);
 
-                    $response->getHeaders()->addHeaderLine('Location', $_POST['url']);
+                    $response->getHeaders()->addHeaderLine('Location', $posts['url']);
                     $response->setStatusCode(302);
                     return;
                 }
 
                 // Redirect to the user login page, if not correct
                 $router   = $e->getRouter();
-                $url = $_SERVER['REQUEST_URI'];
+                $url = $server['REQUEST_URI'];
                 $response = $e->getResponse();
                 $response->getHeaders()->addHeaderLine('Location', '/login?url='.$url);
                 $response->setStatusCode(302);
 
                 return $response;
             } else {
-
+                $response->getHeaders()->addHeaderLine('Location', $posts['url']);
+                $response->setStatusCode(302);
+                return;
             }
 
 
-        });
-
-        $eventManager = $e->getApplication()->getEventManager();
-        $eventManager->attach('dispatch.error', function($event){
-            $e = $event->getResult()->exception;
-
-            switch (get_class($e)) {
-
-                case 'Logview\Exception\NumberException':
-
-
-
-                    break;
-
-            }
         });
 
 
@@ -102,31 +95,6 @@ class Module
                 'namespaces' => array(
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
                 ),
-            ),
-        );
-    }
-
-
-    public function getServiceConfig()
-    {
-        return array(
-            'factories' => array(
-                'Logview\Service\ErrorHandling' =>  function($sm) {
-                    $logger = $sm->get('Zend\Log');
-                    $service = new ErrorHandlingService($logger);
-                    return $service;
-                },
-                'Zend\Log' => function ($sm) {
-                    $filename = 'log_' . date('F') . '.txt';
-                    $dir = '/data/logs';
-                    mkdir($dir, 0777, true);
-
-                    $log = new Logger();
-                    $writer = new LogWriterStream('./data/logs/' . $filename);
-                    $log->addWriter($writer);
-
-                    return $log;
-                },
             ),
         );
     }
