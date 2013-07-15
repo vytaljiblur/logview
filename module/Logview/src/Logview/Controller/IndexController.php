@@ -11,7 +11,7 @@ namespace Logview\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Logview\Error\NumberException;
+use Logview\Exception\NumberException;
 
 class IndexController extends AbstractActionController
 {

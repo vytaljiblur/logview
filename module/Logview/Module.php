@@ -78,7 +78,7 @@ class Module
 
             switch (get_class($e)) {
 
-                case 'Logview\Error\NumberError':
+                case 'Logview\Exception\NumberException':
 
 
 

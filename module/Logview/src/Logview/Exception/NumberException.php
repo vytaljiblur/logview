@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-namespace Logview\Error;
+namespace Logview\Exception;
 
 
 class NumberException extends \Exception {
